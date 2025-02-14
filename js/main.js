@@ -14,8 +14,8 @@ Vue.component('card', {
             <p><strong>Дэдлайн:</strong> {{ card.deadline }}</p>
             <p><strong>Создано:</strong> {{ card.createdAt }}</p>
             <p><strong>Обновлено:</strong> {{ card.updatedAt }}</p>
-            <date-picker v-model="card.deadline"></date-picker>
-            <button @click="$emit('edit-card', columnIndex, cardIndex)">Редактировать</button>
+            <date-picker v-if="columnIndex < 3" v-model="card.deadline"></date-picker>
+            <button v-if="columnIndex < 3" @click="$emit('edit-card', columnIndex, cardIndex)">Редактировать</button>
             <button v-if="columnIndex < 3" @click="$emit('move-card', columnIndex, columnIndex + 1, cardIndex)">Переместить в следующую колонку</button>
             <button v-if="columnIndex === 2" @click="$emit('move-card', columnIndex, columnIndex - 1, cardIndex)">Вернуть в предыдущую колонку</button>
             <button v-if="columnIndex === 0 || columnIndex === 3" @click="$emit('remove-card', columnIndex, cardIndex)">Удалить</button>
