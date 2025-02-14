@@ -23,3 +23,66 @@ Vue.component('card', {
         </div>
     `
 });
+Vue.component('board', {
+    data() {
+        return {
+            columns: [
+                { title: 'Запланированные задачи', cards: [] },
+                { title: 'Задачи в работе', cards: [] },
+                { title: 'Тестирование', cards: [] },
+                { title: 'Выполненные задачи', cards: [] }
+            ]
+        };
+    },
+    created() {
+        this.loadData();
+    },
+    methods: {
+        addCard(columnIndex) {
+            const title = prompt("Введите заголовок задачи:");
+            const description = prompt("Введите описание задачи:");
+            const deadline = new Date().toISOString().split('T')[0]; // Устанавливаем текущую дату по умолчанию
+            const timestamp = new Date().toLocaleString();
+
+            if (title && description) {
+                const newCard = {
+                    title,
+                    description,
+                    deadline,
+                    createdAt: timestamp,
+                    updatedAt: timestamp,
+                    completed: false,
+                    overdue: false
+                };
+                this.columns[columnIndex].cards.push(newCard);
+                this.saveData();
+            }
+        },
+        editCard(columnIndex, cardIndex) {
+            const card = this.columns[columnIndex].cards[cardIndex];
+            const title = prompt("Введите заголовок задачи:", card.title);
+            const description = prompt("Введите описание задачи:", card.description);
+            const timestamp = new Date().toLocaleString();
+
+            if (title && description) {
+                card.title = title;
+                card.description = description;
+                card.updatedAt = timestamp;
+                this.saveData();
+            }
+        },
+        removeCard(columnIndex, cardIndex) {
+            if (confirm("Вы уверены, что хотите удалить эту карточку?")) {
+                this.columns[columnIndex].cards.splice(cardIndex, 1);
+                this.saveData();
+            }
+        },
+        moveCard(sourceColumnIndex, targetColumnIndex, cardIndex) {
+            const card = this.columns[sourceColumnIndex].cards[cardIndex];
+
+            if (targetColumnIndex === 1 && sourceColumnIndex === 2) {
+                const reason = prompt("Введите причину возврата:");
+                if (reason) {
+                    card.returnReason = reason; // Сохраняем причину возврата
+                }
+            }
