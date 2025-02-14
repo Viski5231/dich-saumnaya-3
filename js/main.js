@@ -111,3 +111,26 @@ Vue.component('board', {
             }
         }
     },
+    template: `
+        <div class="board">
+            <div class="column" v-for="(column, index) in columns" :key="index">
+                <h2>{{ column.title }}</h2>
+                <button v-if="index === 0" @click="addCard(index)">Добавить задачу</button>
+                <div v-for="(card, cardIndex) in column.cards" :key="cardIndex">
+                    <card 
+                        :card="card" 
+                        :columnIndex="index" 
+                        :cardIndex="cardIndex" 
+                        @edit-card="editCard" 
+                        @move-card="moveCard" 
+                        @remove-card="removeCard">
+                    </card>
+                </div>
+            </div>
+        </div>
+    `
+});
+
+new Vue({
+    el: '#app'
+});
