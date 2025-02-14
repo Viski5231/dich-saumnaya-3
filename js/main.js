@@ -86,3 +86,28 @@ Vue.component('board', {
                     card.returnReason = reason; // Сохраняем причину возврата
                 }
             }
+            this.columns[targetColumnIndex].cards.push(card);
+            this.columns[sourceColumnIndex].cards.splice(cardIndex, 1);
+            this.checkOverdue(card);
+            this.saveData();
+        },
+        checkOverdue(card) {
+            const today = new Date();
+            const deadline = new Date(card.deadline);
+            card.overdue = deadline < today;
+        },
+        saveData() {
+            localStorage.setItem('kanbanData', JSON.stringify(this.columns));
+        },
+        loadData() {
+            const data = localStorage.getItem('kanbanData');
+            if (data) {
+                this.columns = JSON.parse(data);
+                this.columns.forEach(column => {
+                    column.cards.forEach(card => {
+                        this.checkOverdue(card);
+                    });
+                });
+            }
+        }
+    },
