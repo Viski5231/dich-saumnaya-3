@@ -23,6 +23,7 @@ Vue.component('card', {
         </div>
     `
 });
+
 Vue.component('board', {
     data() {
         return {
@@ -86,6 +87,7 @@ Vue.component('board', {
                     card.returnReason = reason; // Сохраняем причину возврата
                 }
             }
+
             this.columns[targetColumnIndex].cards.push(card);
             this.columns[sourceColumnIndex].cards.splice(cardIndex, 1);
             this.checkOverdue(card);
